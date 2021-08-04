@@ -7,34 +7,59 @@
   
     <div id="mydiv"></div>
     <script type="text/babel">
-      class Hello extends React.Component {
-        render() {
-          return (
-                <div>
-                    <h1>Hello 경욱</h1>
-                    <p>I'm hosted with GitHub Pages.</p>
-                    <FavFood food={["감자탕", "삼겹살", "오므라이스", "비빔면", "라면"]}/>
-                </div>
-            )
+
+      const Input = (props) => {
+        const [name, setName] = React.useState('');
+        const handleChange = (e) => {
+          setName(e.target.value)
         }
+        const addList = props.add
+        const handleClick = (e) => {
+          addList(name)
+          setName('')
+        }
+        return (
+          <div>
+            <input
+              placeholder="이름"
+              value={name}
+              onChange={handleChange}
+            />
+            <button onClick={handleClick}>확인</button>
+          </div>
+        );
       }
-      class FavFood extends React.Component{
-          render(){
-              
-              const foods = this.props.food.map(food => {
-                  return <li>{food}</li>
-              })
-              return (
-                  <div>
-                    <ul>
-                        <h2>My favorite foods</h2>
-                        {foods}
-                    </ul>
-                </div>
-              )
-          }
+
+      const FavFoods = (props) => {
+        const foods = props.food
+        const foodList = foods.map(food => {
+          return (
+            <li>{food}</li>
+          )
+        })
+        return (
+          <ul>{foodList}</ul>
+        )
       }
-      ReactDOM.render(<Hello />, document.getElementById('mydiv'))
+
+      const Greet = (props) => {
+        const [food, setFood] = React.useState([])
+        const addList = (newFood) => {
+          // setFood(food.push(newFood))
+          setFood([...food, newFood])
+        }
+        return (
+          <div>
+            <h1>Hi</h1>
+            <FavFoods food={food}/>
+            <Input add={addList}/>
+          </div>
+        )
+      }
+
+      ReactDOM.render(<Greet />, document.getElementById('mydiv'))
     </script>
   </body>
 </html>
+
+
