@@ -8,33 +8,30 @@
     <div id="mydiv"></div>
     <script type="text/babel">
 
-      const Input = (props) => {
-        const [name, setName] = React.useState('');
-        const handleChange = (e) => {
-          setName(e.target.value)
-        }
-        const addList = props.add
+      const A = (props) => {
+        const [isDone, setIsDone] = React.useState(false)
+        const food = props.food
         const handleClick = (e) => {
-          addList(name)
-          setName('')
+          if (isDone) {
+            setIsDone(false)
+          } else {
+            setIsDone(true)
+          }
+        }
+        let displayText = food + ' finished'
+        if (!isDone) {
+          displayText = food
         }
         return (
-          <div>
-            <input
-              placeholder="이름"
-              value={name}
-              onChange={handleChange}
-            />
-            <button onClick={handleClick}>확인</button>
-          </div>
-        );
+          <li onClick={handleClick}>{displayText}</li>
+        )
       }
 
       const FavFoods = (props) => {
         const foods = props.food
         const foodList = foods.map(food => {
           return (
-            <li>{food}</li>
+            <A food={food}/>
           )
         })
         return (
@@ -42,19 +39,37 @@
         )
       }
 
+      const Input = (props) => {
+        const [name, setName] = React.useState('');
+        const handleChange = (e) => {
+          setName(e.target.value)
+        }
+
+        const handleClick = (e) => {
+          props.addList(name)
+          setName('')
+        }
+
+        return (
+          <div>
+            <input value={name} onChange={handleChange} />
+            <button onClick={handleClick}>Submit</button>
+          </div>
+        )
+      }
+
       const Greet = (props) => {
         const [food, setFood] = React.useState([])
-        const addList = (newFood) => {
-          // setFood(food.push(newFood))
-          setFood([...food, newFood])
+        const addList = (a) => {
+          setFood([...food, a])
         }
         return (
           <div>
-            <h1>Hi</h1>
             <FavFoods food={food}/>
-            <Input add={addList}/>
+            <Input addList={addList}/>
           </div>
         )
+        
       }
 
       ReactDOM.render(<Greet />, document.getElementById('mydiv'))
