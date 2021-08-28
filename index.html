@@ -8,85 +8,85 @@
     <div id="mydiv"></div>
     <script type="text/babel">
 
-      const A = (props) => {
+      const ToDoItem = (props) => {
         const [isDone, setIsDone] = React.useState(false)
-        const food = props.food
-        const delList = props.delList
+        const item = props.item
+        const deleteList = props.deleteList
         const handleClick = (e) => {
-          if (isDone) {
+          if (isDone){
             setIsDone(false)
           } else {
             setIsDone(true)
           }
         }
         const handleBtnClick = (e) => {
-          delList(food)
+          deleteList(item)
         }
-        let toggle = food
-        if (isDone) {
-          toggle = food + ' finished'
+
+        let displayText = item
+        if(isDone){
+          displayText = item + ' finished'
         }
 
         return (
-          <div key={food}>
-            <li onClick={handleClick}>{toggle}</li>
-            <button onClick={handleBtnClick}>X</button>
+          <div>
+            <li onClick={handleClick}>{displayText}</li>
+            <button onClick={handleBtnClick}>Delete</button>
           </div>
         )
       }
 
-      const FavFoods = (props) => {
-        const foods = props.foods 
-        const delList = props.delList
-        const foodList = foods.map(food => {
+      const ToDoList = (props) => {
+        const toDoList = props.toDoList
+        const toDoListComponent = toDoList.map(item => {
           return (
-            <A food={food} delList={delList}/>
+            <ToDoItem key={item} deleteList={props.deleteList} item={item}/>
           )
         })
         return (
-          <ul>{foodList}</ul>
+          <ul>{toDoListComponent}</ul>
         )
       }
 
       const Input = (props) => {
         const [name, setName] = React.useState('')
+        const addList = props.addList
         const handleChange = (e) => {
           setName(e.target.value)
         }
-        const addList = props.addList
         const handleClick = (e) => {
           addList(name)
           setName('')
         }
         return (
           <div>
-            <input onChange={handleChange} value={name} />
+            <input onChange={handleChange} value={name}/>
             <button onClick={handleClick}>Submit</button>
           </div>
         )
       }
 
-      const Greet = (props) => {
-        const [foods, setFoods] = React.useState([])
-        const addList = (newFood) => {
-          setFoods([...foods, newFood])
+      const ToDoApp = (props) => {
+        const [toDoList, setToDoList] = React.useState([])
+        const addList = (newItem) => {
+          setToDoList([...toDoList, newItem])
         }
-        const delList = (delFood) => {
-          const deleted = foods.filter(food => {
-            return food !== delFood
+        const deleteList = (del) => {
+          const newList = toDoList.filter(item => {
+            return item !== del
           })
-          setFoods(deleted)
+          setToDoList(newList)
         }
+
         return (
           <div>
-            <FavFoods delList={delList} foods={foods}/>
+            <ToDoList toDoList={toDoList} deleteList={deleteList}/>
             <Input addList={addList}/>
-            
           </div>
         )
       }
 
-      ReactDOM.render(<Greet />, document.getElementById('mydiv'))
+      ReactDOM.render(<ToDoApp />, document.getElementById('mydiv'))
     </script>
   </body>
 </html>
